@@ -8,4 +8,6 @@
 # 忽略 Python 编译产生的 __pycache__ 文件夹
 __pycache__/
 
+data/*
+!data/loaders.py
 
