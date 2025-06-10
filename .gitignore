@@ -9,4 +9,5 @@ __pycache__/
 
 data/*
 !data/loaders.py
+!__init__.py
 
