@@ -1,0 +1,11 @@
+# 忽略所有 'runs/' 目录下的文件
+/runs/
+/data/
+/report/
+/saved_models/
+
+
+# 忽略 Python 编译产生的 __pycache__ 文件夹
+__pycache__/
+
+
