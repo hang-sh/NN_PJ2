@@ -15,30 +15,30 @@ class Net(nn.Module):
         self.activation = nn.LeakyReLU(inplace=True)
         self.conv1 = nn.Sequential(
             nn.Conv2d(3, 64, 3,padding=1),
-            self.activation,
             nn.BatchNorm2d(64), 
+            self.activation,
             nn.Conv2d(64, 64, 3,padding=1),
-            self.activation,
             nn.BatchNorm2d(64), 
+            self.activation,
             nn.MaxPool2d(2, 2)
         )
         self.res = nn.Conv2d(3, 64, 1, stride=2)
         self.conv2 = nn.Sequential(
             nn.Conv2d(64, 128, 3, padding=1),
-            self.activation,
             nn.BatchNorm2d(128), 
+            self.activation,
             nn.Conv2d(128, 128, 3, padding=1),
-            self.activation,
             nn.BatchNorm2d(128), 
+            self.activation,
             nn.MaxPool2d(2, 2)
         )
         self.conv3 = nn.Sequential(
             nn.Conv2d(128, 256, 3, padding=1),
-            self.activation,
             nn.BatchNorm2d(256), 
+            self.activation,
             nn.Conv2d(256, 256, 3, padding=1),
-            self.activation,
             nn.BatchNorm2d(256), 
+            self.activation,
             nn.MaxPool2d(2, 2)
         )
         self.dense = nn.Sequential(
