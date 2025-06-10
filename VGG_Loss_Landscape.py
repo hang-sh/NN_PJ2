@@ -10,7 +10,7 @@ from tqdm import tqdm as tqdm
 from IPython import display
 
 from models.vgg import VGG_A
-from models.vgg import VGG_A_BatchNorm # you need to implement this network
+from models.vgg import VGG_A_BatchNorm 
 from data.loaders import get_cifar_loader
 
 import torchvision
@@ -155,7 +155,6 @@ def train(model, optimizer, criterion, train_loader, val_loader, scheduler=None,
             grad.append(grad_mean)
             learning_curve[epoch] += loss.item()
             ## --------------------
-            # loss.backward()
             optimizer.step()
 
         losses_list.append(loss_list)
@@ -212,8 +211,6 @@ def train(model, optimizer, criterion, train_loader, val_loader, scheduler=None,
 # Use this function to plot the final loss landscape,
 # fill the area between the two curves can use plt.fill_between()
 def plot_loss_landscape(min_curve_list, max_curve_list, label_list=['Standard VGG', 'Standard VGG + BatchNorm'], colors=['green', 'red']):
-    ## --------------------
-    # Add your code
     epo = np.arange(len(min_curve_list[0]))        
     plt.figure(figsize=(10, 5))
     for i in range(len(min_curve_list)):
@@ -233,33 +230,43 @@ def plot_loss_landscape(min_curve_list, max_curve_list, label_list=['Standard VG
     # plt.show()
 
 if __name__ == '__main__':
+
+    set_random_seeds(seed_value=2020, device=device)
+
     # show_sample()
+    
+# ========== 第一部分 ==========
     # Train your model
     # feel free to modify
-    epo = 20
-    set_random_seeds(seed_value=2020, device=device)
-    
+    epo = 25
+
     model = VGG_A()
     # model = VGG_A_BatchNorm()
+    
     lr = 0.001 
-    """
     optimizer = torch.optim.Adam(model.parameters(), lr = lr, weight_decay=1e-4)
     # criterion = nn.CrossEntropyLoss()
     criterion = nn.CrossEntropyLoss(label_smoothing=0.1)  # 标签平滑
 
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=15, gamma=0.1) # add
-    loss, grads = train(model, optimizer, criterion, train_loader, val_loader, epochs_n=epo, best_model_path=os.path.join(models_path, 'vgg_a.pth'),scheduler=scheduler, exp_name='vgg_a')
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=15, gamma=0.1) 
+    # 可自定义模型文件名和实验名
+    loss, grads = train(model, optimizer, criterion, train_loader, val_loader, epochs_n=epo, scheduler=scheduler, 
+                        best_model_path = os.path.join(models_path, 'vgg_a.pth'), 
+                        exp_name = 'vgg_a')
     np.savetxt(os.path.join(loss_save_path, 'loss.txt'), loss, fmt='%s', delimiter=' ')
     np.savetxt(os.path.join(grad_save_path, 'grads.txt'), grads, fmt='%s', delimiter=' ')
-    """
-    
+# ========== 第一部分 ==========
+
+# ========== 第二部分 ==========
+
 # Maintain two lists: max_curve and min_curve,
 # select the maximum value of loss in all models
 # on the same step, add it to max_curve, and
 # the minimum value to min_curve
 ## --------------------
 # Add your code
-    
+
+    epo = 20
     # criterion = nn.CrossEntropyLoss()
     criterion = nn.CrossEntropyLoss(label_smoothing=0.1)  # 标签平滑
 
@@ -282,21 +289,10 @@ if __name__ == '__main__':
                 model = VGG_A_BatchNorm()
 
             optimizer = torch.optim.AdamW(model.parameters(), lr = lr, weight_decay=1e-4)
-            scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=15, gamma=0.1) # add
+            scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=15, gamma=0.1) 
             loss, grads = train(model, optimizer, criterion, train_loader, val_loader, epochs_n=epo, best_model_path=os.path.join(models_path, f'{net}_lr_{lr}.pth'),scheduler=scheduler,exp_name=f'{net}_lr_{lr}')
-            # np.savetxt(os.path.join(loss_save_path, f'loss_{net}_lr_{lr}.txt'), loss, fmt='%s', delimiter=' ')
-            # np.savetxt(os.path.join(grad_save_path, f'grads_{net}_lr_{lr}.txt'), grads, fmt='%s', delimiter=' ')
             loss = np.array(loss).reshape(-1).squeeze()
             all_losses.append(loss)
-            # print(loss)
-            # print(np.shape(loss))
-
-            # if len(min_curve) != 0 and len(max_curve)!= 0:
-                # min_curve = np.amin(np.vstack((min_curve, loss)), axis=0)
-                # max_curve = np.amax(np.vstack((max_curve, loss)), axis=0)
-            # else:
-                # min_curve = loss
-                # max_curve = loss
 
         min_curve = np.amin(all_losses, axis=0)
         max_curve = np.amax(all_losses, axis=0)
@@ -307,3 +303,4 @@ if __name__ == '__main__':
         
     plot_loss_landscape(min_curve_list, max_curve_list)
 
+# ========== 第二部分 ==========

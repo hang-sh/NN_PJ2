@@ -6,9 +6,13 @@ from torchvision import datasets, transforms
 from pytorch_grad_cam import GradCAM
 from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
 from pytorch_grad_cam.utils.image import show_cam_on_image
+import os
 
 PATH = 'saved_models\cifar_net.pth'
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+
+if not os.path.exists('./report'):
+    os.makedirs('./report')
 
 model = Net()
 model.load_state_dict(torch.load(PATH, map_location=device), strict=False)
@@ -66,4 +70,4 @@ axs[1].axis('off')
 
 plt.tight_layout()
 plt.show()
-# plt.savefig('report/cam_result.png')  # 保存结果
+plt.savefig('report/cam_result.png')  # 保存结果

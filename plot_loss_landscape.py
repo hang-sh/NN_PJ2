@@ -5,7 +5,11 @@ from torchvision import datasets, transforms
 import torch.nn as nn
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
+if not os.path.exists('./report'):
+    os.makedirs('./report')
+    
 # 数据预处理和加载
 transform = transforms.Compose([
     transforms.ToTensor(),
@@ -38,7 +42,7 @@ def metric(model:Net):
 # 计算损失景观
 landscape = loss_landscapes.random_plane(
     model=net,
-    metric=metric,  # 使用我们定义的度量函数
+    metric=metric,  
     steps=30,
     distance=1.0
 )
@@ -58,4 +62,4 @@ ax.set_ylabel('Direction 2')
 ax.set_zlabel('Loss')
 plt.title('Loss Landscape')
 plt.show()
-# plt.savefig('report/loss_landscape.png')
+plt.savefig('report/loss_landscape.png')

@@ -53,7 +53,8 @@ if __name__ == "__main__":
     txt_save_path = os.path.join(home_path, 'reports', 'outputs')
     os.makedirs(figures_path, exist_ok=True)
     os.makedirs(txt_save_path, exist_ok=True)
-
+    
+    # 在对应位置填写.txt文件名和结果文件名
     plot_loss_curve(os.path.join(txt_save_path, 'loss_vgga0.txt'),
                     save_dir=figures_path, fileneme='loss_curve_vgg_a0.png')
     

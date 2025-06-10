@@ -2,9 +2,13 @@ from myNN import Net
 import torch
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 PATH = 'saved_models\cifar_net.pth'
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+
+if not os.path.exists('./report'):
+    os.makedirs('./report')
 
 net = Net()
 net.load_state_dict(torch.load(PATH, map_location=device), strict=False)
